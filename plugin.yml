@@ -1,0 +1,6 @@
+name: ScoreBoardApi
+main: Voltage\Api\ScoreBoardApi
+version: 0.1
+api: 4.0.0
+authors:
+  - VirVoltaSurMC
