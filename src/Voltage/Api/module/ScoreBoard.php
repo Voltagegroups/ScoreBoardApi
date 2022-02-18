@@ -32,15 +32,24 @@ final class ScoreBoard
 
     private SetDisplayObjectivePacket $display;
 
-    public function __construct(string $displayName = "",?string $objectiveName = null, string $displaySlot = self::SLOT_SIDEBAR, int $sortOrder = self::SORT_ASCENDING, int $slotOrder = SetDisplayObjectivePacket::SORT_ORDER_ASCENDING)
+    public function __construct(string $displayName = "",?string $objectiveName = null, ?string $displaySlot = null, ?int $sortOrder = null, ?int $slotOrder = null, ?array $players = null, bool $send = false)
     {
+        $this->displayName = $displayName;
         if (is_null($objectiveName)) {
             $objectiveName = (string)self::$count++;
         }
         $this->objectiveName = $objectiveName;
-        $this->displayName = $displayName;
+        if (is_null($displaySlot)) {
+            $displaySlot = self::SLOT_SIDEBAR;
+        }
         $this->displaySlot = $displaySlot;
+        if (is_null($sortOrder)) {
+            $sortOrder = self::SORT_ASCENDING;
+        }
         $this->sortOrder = $sortOrder;
+        if (is_null($slotOrder)) {
+            $slotOrder = SetDisplayObjectivePacket::SORT_ORDER_ASCENDING;
+        }
 
         $pk = new SetDisplayObjectivePacket();
         $pk->displaySlot = $displaySlot;
@@ -49,6 +58,12 @@ final class ScoreBoard
         $pk->criteriaName = self::CRITERIA;
         $pk->sortOrder = $slotOrder;
         $this->display = $pk;
+        if (!is_null($players)) {
+            $this->addPlayers($players);
+        }
+        if ($send) {
+            $this->sendToAll();
+        }
     }
 
     /**
@@ -272,12 +287,12 @@ final class ScoreBoard
                 $this->entries[$player->getId()][SetScorePacket::TYPE_REMOVE] = [];
                 $this->entries[$player->getId()][SetScorePacket::TYPE_CHANGE] = [];
             }
-            $this->entries[$player->getId()][$type] = $pk;
+            $this->entries[$player->getId()][$type][] = $pk;
         }
     }
 
     private function getEntriesPacket(Player $player, int $type) : ?array {
-        if (!isset($this->entries[$player->getId()][$type])) {
+        if (isset($this->entries[$player->getId()][$type])) {
             $data = $this->entries[$player->getId()][$type];
             unset($this->entries[$player->getId()]);
             return $data;

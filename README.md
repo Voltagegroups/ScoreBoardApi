@@ -41,7 +41,7 @@ $line = new ScoreBoardLine(int $score, string $message = "", ?int $scoreid = nul
 $scoreboard->setLineToAll(ScoreBoardLine $line);
 $scoreboard->setLinePlayers(array $players,ScoreBoardLine $line);
 
-//this function can change 
+//this function can change after 
 
 /** @var ScoreBoard*/
 $line = new ScoreBoardLine(int $score, string $message = "", ?int $scoreid = null, int $type = ScorePacketEntry::TYPE_FAKE_PLAYER);
@@ -51,6 +51,7 @@ $scoreboard->removeLinePlayers(array $players,ScoreBoardLine $line);
 
 Set the Settings
 ```PHP
+
 ```
 
 Add and remove players
@@ -65,16 +66,28 @@ $scoreboard->removePlayers(array $players);
 $scoreboard->removeAllPlayers();
 ```
 
-Example
+Examples
 
 ```PHP
-$scoreboard = ScoreBoardApi::getManager()->getScoreBoard(ScoreBoardApi::getManager()->createScoreBoard());
+$scoreboard = ScoreBoardApi::getManager()->getScoreBoard(ScoreBoardApi::getManager()->createScoreBoard("Title", null, null, null, null, Server::getInstance()->getOnlinePlayers(), false));
 $player = Server::getInstance()->getPlayerExact("voltage");
 $line1 = new ScoreBoardLine(1, "Hello World");
 $scoreboard
-    ->setDisplayName('Title')
     ->setLineToAll($line1)
-    ->setLineToPlayers([$player], new ScoreBoardLine(2, "You are the best"))
+    ->setLineToPlayers([$player], new ScoreBoardLine(2, "You are the best " . $player->getName()))
+    ->sendToAll();
+```
+=
+```PHP
+$id = ScoreBoardApi::getManager()->createScoreBoard();
+$scoreboard = ScoreBoardApi::getManager()->getScoreBoard($id);
+$player = Server::getInstance()->getPlayerExact("voltage");
+$line1 = new ScoreBoardLine(1, "Hello World");
+$scoreboard
+    ->addPlayer($player)
+    ->setDisplayName("Title")
+    ->setLineToAll($line1)
+    ->setLineToPlayers([$player], new ScoreBoardLine(2, "You are the best " . $player->getName()))
     ->sendToAll();
 ```
 

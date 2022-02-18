@@ -3,6 +3,7 @@
 namespace Voltage\Api;
 
 use pocketmine\plugin\PluginBase;
+use Voltage\Api\listener\ScoreBoardListener;
 use Voltage\Api\manager\ScoreBoardManager;
 
 class ScoreBoardApi extends PluginBase
@@ -19,5 +20,10 @@ class ScoreBoardApi extends PluginBase
     public function onLoad(): void
     {
         self::$manager = new ScoreBoardManager();
+    }
+
+    public function onEnable(): void
+    {
+        new ScoreBoardListener($this);
     }
 }
