@@ -18,7 +18,7 @@ Branch stable for [PM4](https://github.com/Voltagegroups/ScoreBoardApi/tree/pm4)
 
 
 ## Api
-A very basic example can be seen here: [ScoreBoardHud](https://github.com/Voltagegroups/ScoreBoardHud)
+A very basic example can be seen here: [ScoreBoardHud](https://github.com/Voltagegroups/ScoreBoardHud) In dev
 
 Create a new score board
 ```PHP
@@ -84,7 +84,7 @@ $scoreboard = ScoreBoardApi::getManager()->getScoreBoard($id);
 $player = Server::getInstance()->getPlayerExact("voltage");
 $line1 = new ScoreBoardLine(1, "Hello World");
 $scoreboard
-    ->addPlayer($player)
+    ->addPlayer(Server::getInstance()->getOnlinePlayers())
     ->setDisplayName("Title")
     ->setLineToAll($line1)
     ->setLineToPlayers([$player], new ScoreBoardLine(2, "You are the best " . $player->getName()))
